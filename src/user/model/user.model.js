@@ -1,6 +1,12 @@
 const mongoose = require("mongoose");
 
-const clientTypes = ['Individual', 'Company', 'Contractor', 'Architect', 'Other'];
+const clientTypes = [
+  "Individual",
+  "Company",
+  "Contractor",
+  "Architect",
+  "Other",
+];
 
 const UsersSchema = new mongoose.Schema({
   id: {

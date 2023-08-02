@@ -1,12 +1,31 @@
 const BookingService = require("../../booking/service/booking.service");
 const bookingService = new BookingService();
+const emailService = require("../../email/service/email.service");
 
 class BookingController {
   constructor() {}
 
   static async createBooking(req, res) {
     try {
-      const newBooking = await bookingService.createBooking(req.body);
+      const { service_id, site_location, book_date, due_date, assignee_ids } =
+        req.body;
+
+      const newBookingData = {
+        service_id,
+        user_id: req.user._id,
+        site_location,
+        book_date,
+        due_date,
+        assignee_ids,
+        is_verified: false,
+      };
+
+      const newBooking = await bookingService.createBooking(newBookingData);
+
+      const { name, email } = req.user;
+
+      await emailService.sendVerificationEmail(name, email, newBooking._id);
+
       return res.json(newBooking);
     } catch (error) {
       return res
@@ -46,13 +65,32 @@ class BookingController {
   static async updateBooking(req, res) {
     try {
       const { id } = req.params;
-      const updatedBooking = await bookingService.updateBooking(id, req.body);
-      if (!updatedBooking) {
-        return res
-          .status(404)
-          .json({ error: true, message: "Booking not found" });
+      const updatedBookingData = req.body;
+
+      if (req.user.role === "Admin" && "is_verified" in updatedBookingData) {
+        const updatedBooking = await bookingService.updateBooking(
+          id,
+          updatedBookingData
+        );
+        if (!updatedBooking) {
+          return res
+            .status(404)
+            .json({ error: true, message: "Booking not found" });
+        }
+        return res.json(updatedBooking);
+      } else {
+        delete updatedBookingData.is_verified;
+        const updatedBooking = await bookingService.updateBooking(
+          id,
+          updatedBookingData
+        );
+        if (!updatedBooking) {
+          return res
+            .status(404)
+            .json({ error: true, message: "Booking not found" });
+        }
+        return res.json(updatedBooking);
       }
-      return res.json(updatedBooking);
     } catch (error) {
       return res
         .status(500)
@@ -63,13 +101,20 @@ class BookingController {
   static async deleteBooking(req, res) {
     try {
       const { id } = req.params;
-      const deletedBooking = await bookingService.deleteBooking(id);
-      if (!deletedBooking) {
+
+      if (req.user.role === "Admin") {
+        const deletedBooking = await bookingService.deleteBooking(id);
+        if (!deletedBooking) {
+          return res
+            .status(404)
+            .json({ error: true, message: "Booking not found" });
+        }
+        return res.json(deletedBooking);
+      } else {
         return res
-          .status(404)
-          .json({ error: true, message: "Booking not found" });
+          .status(403)
+          .json({ error: true, message: "Permission denied" });
       }
-      return res.json(deletedBooking);
     } catch (error) {
       return res
         .status(500)

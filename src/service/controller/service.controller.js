@@ -9,7 +9,9 @@ class BookingController {
       const newBooking = await bookingService.addBooking(req.body);
       return res.json(newBooking);
     } catch (error) {
-      return res.status(500).json({ error: true, message: "Failed to add booking" });
+      return res
+        .status(500)
+        .json({ error: true, message: "Failed to add booking" });
     }
   }
 
@@ -18,7 +20,9 @@ class BookingController {
       const bookings = await bookingService.getBookings();
       return res.json(bookings);
     } catch (error) {
-      return res.status(500).json({ error: true, message: "Failed to fetch bookings" });
+      return res
+        .status(500)
+        .json({ error: true, message: "Failed to fetch bookings" });
     }
   }
 
@@ -27,11 +31,15 @@ class BookingController {
       const { id } = req.params;
       const booking = await bookingService.getBookingById(id);
       if (!booking) {
-        return res.status(404).json({ error: true, message: "Booking not found" });
+        return res
+          .status(404)
+          .json({ error: true, message: "Booking not found" });
       }
       return res.json(booking);
     } catch (error) {
-      return res.status(500).json({ error: true, message: "Failed to fetch booking" });
+      return res
+        .status(500)
+        .json({ error: true, message: "Failed to fetch booking" });
     }
   }
 
@@ -40,11 +48,15 @@ class BookingController {
       const { id } = req.params;
       const updatedBooking = await bookingService.updateBooking(id, req.body);
       if (!updatedBooking) {
-        return res.status(404).json({ error: true, message: "Booking not found" });
+        return res
+          .status(404)
+          .json({ error: true, message: "Booking not found" });
       }
       return res.json(updatedBooking);
     } catch (error) {
-      return res.status(500).json({ error: true, message: "Failed to update booking" });
+      return res
+        .status(500)
+        .json({ error: true, message: "Failed to update booking" });
     }
   }
 
@@ -53,11 +65,15 @@ class BookingController {
       const { id } = req.params;
       const deletedBooking = await bookingService.deleteBooking(id);
       if (!deletedBooking) {
-        return res.status(404).json({ error: true, message: "Booking not found" });
+        return res
+          .status(404)
+          .json({ error: true, message: "Booking not found" });
       }
       return res.json(deletedBooking);
     } catch (error) {
-      return res.status(500).json({ error: true, message: "Failed to delete booking" });
+      return res
+        .status(500)
+        .json({ error: true, message: "Failed to delete booking" });
     }
   }
 }

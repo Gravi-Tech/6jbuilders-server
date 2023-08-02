@@ -40,12 +40,15 @@ class BookingService {
         {
           new: true,
         }
-      );
+      )
+        .populate("service_id")
+        .populate("user_id")
+        .populate("assignee_ids");
       return updatedBooking
         ? { error: false, data: updatedBooking }
         : { error: true, data: null };
     } catch (error) {
-      return { error: true, data: error };
+      return { error: true, data: error.message };
     }
   }
 
@@ -56,7 +59,7 @@ class BookingService {
         ? { error: false, data: deletedBooking }
         : { error: true, data: null };
     } catch (error) {
-      return { error: true, data: error };
+      return { error: true, data: error.message };
     }
   }
 }

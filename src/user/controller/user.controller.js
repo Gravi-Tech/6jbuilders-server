@@ -6,7 +6,6 @@ class UserController {
 
   static async addUser(req, res) {
     try {
-
       const newUser = await service.addUser(req.body);
       return res.json(newUser);
     } catch (error) {
@@ -19,7 +18,10 @@ class UserController {
   static async getUsers(req, res) {
     try {
       if (req.user.role !== "Admin") {
-        return res.json({ error: true, message: "You do not have permission to get all users." });
+        return res.json({
+          error: true,
+          message: "You do not have permission to get all users.",
+        });
       }
 
       const users = await service.getUsers();
@@ -34,7 +36,10 @@ class UserController {
   static async getUserById(req, res) {
     try {
       if (req.user.role !== "Admin") {
-        return res.json({ error: true, message: "You do not have permission to get a user by ID." });
+        return res.json({
+          error: true,
+          message: "You do not have permission to get a user by ID.",
+        });
       }
 
       const { id } = req.params;
@@ -53,7 +58,10 @@ class UserController {
   static async updateUser(req, res) {
     try {
       if (req.user.role !== "Admin") {
-        return res.json({ error: true, message: "You do not have permission to update users." });
+        return res.json({
+          error: true,
+          message: "You do not have permission to update users.",
+        });
       }
 
       const { id } = req.params;
@@ -72,7 +80,10 @@ class UserController {
   static async deleteUser(req, res) {
     try {
       if (req.user.role !== "Admin") {
-        return res.json({ error: true, message: "You do not have permission to delete users." });
+        return res.json({
+          error: true,
+          message: "You do not have permission to delete users.",
+        });
       }
 
       const { id } = req.params;
@@ -105,7 +116,6 @@ class UserController {
 
   static async deleteUserProfile(req, res) {
     try {
-      
       const { id } = req.user;
       const deletedUser = await service.deleteUser(id);
       if (!deletedUser) {
