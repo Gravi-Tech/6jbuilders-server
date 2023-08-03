@@ -1,48 +1,60 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-const serviceTypes = ['Construction','Repair', 'Maintenance', 'Renovation'];
-const statusTypes = ['Available', 'Not Available'];
+const serviceTypes = [
+  "Home Renovation",
+  "Interior Design",
+  "Plumbing",
+  "Electrical",
+  "Drywall Installation",
+  "Tile Installation",
+  "Glass and Aluminum Installation",
+  "Welding",
+  "Roofing",
+  "Cabinets",
+  "Home Repair Services",
+];
 
 const ServiceSchema = new mongoose.Schema({
   id: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
-    unique: true
+    unique: true,
   },
   service_type: {
     type: String,
     required: true,
-    enum: serviceTypes
+    enum: serviceTypes,
+    default: "Home Renovation",
   },
   title: {
     type: String,
-    required: true
+    required: true,
   },
   description: {
     type: String,
-    required: false
+    required: false,
   },
   status: {
     type: String,
     required: true,
     enum: statusTypes,
-    default: 'Available'
+    default: "Available",
   },
   created_date: {
     type: Date,
-    default: Date.now
+    default: Date.now,
   },
   updated_date: {
     type: Date,
-    default: Date.now
+    default: Date.now,
   },
   updated_by: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
-    ref: 'Admin'
-  }
+    ref: "Admin",
+  },
 });
 
-const Service = mongoose.model('Service', ServiceSchema);
+const Service = mongoose.model("Service", ServiceSchema);
 
 module.exports = Service;

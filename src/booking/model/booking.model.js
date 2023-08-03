@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const bookStatus = ['Open', 'In Progess', 'Complete', 'Unverified'];
+const bookStatus = ["Open", "In Progress", "Complete", "Unverified"];
 
 const BookingSchema = new mongoose.Schema({
   id: {
@@ -40,12 +40,13 @@ const BookingSchema = new mongoose.Schema({
   },
   is_verified: {
     type: Boolean,
-    required: false,
+    required: true,
+    default: false,
   },
   status: {
     type: String,
     enum: bookStatus,
-    default: 'Open'
+    default: "Open",
   },
   attachment: {
     type: String,
