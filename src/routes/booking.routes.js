@@ -3,7 +3,7 @@ const router = express.Router();
 const Authorization = require("../middlewares/authorization");
 const BookingController = require("../controllers/booking.controller");
 
-router.post("/bookings", Authorization.authorized, BookingController.addBooking);
+router.post("/bookings", Authorization.authorized, BookingController.createBooking);
 router.get("/bookings", BookingController.getBookings);
 router.get("/bookings/:id", BookingController.getBookingById);
 router.put("/bookings/:id", Authorization.authorized, BookingController.updateBooking);

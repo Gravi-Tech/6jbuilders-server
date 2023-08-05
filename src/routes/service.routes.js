@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Authorization = require("../middlewares/authorization");
-const ServiceController = require("../services/service.service");
+const ServiceController = require("../controllers/service.controller");
 const { adminPermissions} = require("../middlewares/permissions");
 
 router.get("/services", Authorization.authorized, ServiceController.getServices);

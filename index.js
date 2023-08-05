@@ -34,7 +34,7 @@ app.use("api", materialRoutes);
 const notificationRoutes = require("./src/routes/notification.routes");
 app.use("api", notificationRoutes);
 
-const projectRoutes = require("./sr/routes/project.routes");
+const projectRoutes = require("./src/routes/project.routes");
 app.use("/api", projectRoutes);
 
 const serviceRoutes = require("./src/routes/service.routes");

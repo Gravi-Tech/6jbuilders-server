@@ -14,6 +14,11 @@ const serviceTypes = [
   "Home Repair Services",
 ];
 
+const statusTypes = [
+  "Available",
+  "Not Available"
+]
+
 const ServiceSchema = new mongoose.Schema({
   id: {
     type: mongoose.Schema.Types.ObjectId,
