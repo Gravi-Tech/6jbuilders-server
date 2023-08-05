@@ -1,12 +1,12 @@
-const BookingService = require("../../service/service/service.service");
-const bookingService = new BookingService();
+const ServiceService = require("../services/service.service");
+const serviceService = new ServiceService();
 
-class BookingController {
+class ServiceController {
   constructor() {}
 
-  static async addBooking(req, res) {
+  static async addService(req, res) {
     try {
-      const newBooking = await bookingService.addBooking(req.body);
+      const newBooking = await serviceService.addService(req.body);
       return res.json(newBooking);
     } catch (error) {
       return res
@@ -15,9 +15,9 @@ class BookingController {
     }
   }
 
-  static async getBookings(req, res) {
+  static async getServices(req, res) {
     try {
-      const bookings = await bookingService.getBookings();
+      const bookings = await serviceService.getServices();
       return res.json(bookings);
     } catch (error) {
       return res
@@ -26,10 +26,10 @@ class BookingController {
     }
   }
 
-  static async getBookingById(req, res) {
+  static async getServiceById(req, res) {
     try {
       const { id } = req.params;
-      const booking = await bookingService.getBookingById(id);
+      const booking = await serviceService.getServiceById(id);
       if (!booking) {
         return res
           .status(404)
@@ -43,10 +43,10 @@ class BookingController {
     }
   }
 
-  static async updateBooking(req, res) {
+  static async updateService(req, res) {
     try {
       const { id } = req.params;
-      const updatedBooking = await bookingService.updateBooking(id, req.body);
+      const updatedBooking = await serviceService.updateService(id, req.body);
       if (!updatedBooking) {
         return res
           .status(404)
@@ -60,10 +60,10 @@ class BookingController {
     }
   }
 
-  static async deleteBooking(req, res) {
+  static async deleteService(req, res) {
     try {
       const { id } = req.params;
-      const deletedBooking = await bookingService.deleteBooking(id);
+      const deletedBooking = await serviceService.deleteService(id);
       if (!deletedBooking) {
         return res
           .status(404)
@@ -78,4 +78,4 @@ class BookingController {
   }
 }
 
-module.exports = BookingController;
+module.exports = ServiceController;
