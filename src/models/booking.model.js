@@ -37,16 +37,12 @@ const BookingSchema = new mongoose.Schema({
   },
   selectedTimeRange: {
     type: String,
-    required: true,
+    required: false,
   },
   isVisited: {
     type: Boolean,
     required: true,
     default: false,
-  },
-  attachment: {
-    type: String,
-    required: false,
   },
   status: {
     type: String,

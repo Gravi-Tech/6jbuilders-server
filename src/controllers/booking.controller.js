@@ -13,6 +13,7 @@ class BookingController {
         scheduleDate,
         selectedTimeRange,
         type,
+        note
       } = req.body;
 
       const newBookingData = {
@@ -25,6 +26,7 @@ class BookingController {
         createdDate: new Date(),
         scheduleDate,
         selectedTimeRange,
+        note
       };
 
       const newBooking = await bookingService.createBooking(newBookingData);
