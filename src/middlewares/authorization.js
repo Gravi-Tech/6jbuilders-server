@@ -36,14 +36,14 @@ class Authorization {
   static authorized(req, res, next) {
     const token = req.headers.authorization;
     if (token) {
-      jwt.verify(token, tokenkey, (err, user) => {
+      jwt.verify(token, tokenkey, (err, admin) => {
         if (err) {
           return res.json({
             error: true,
             message: "You are forbidden.",
           });
         }
-        req.user = user;
+        req.admin = admin;
         next();
       });
     } else {

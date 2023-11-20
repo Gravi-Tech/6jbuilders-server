@@ -1,6 +1,7 @@
 const AdminService = require("../services/admin.service");
 const adminService = new AdminService();
-
+const Authorization = require("../middlewares/authorization");
+const bcrypt = require("bcrypt");
 class AdminController {
   constructor() {}
 
@@ -60,20 +61,24 @@ class AdminController {
     }
   }
 
-  static async deleteAdmin(req, res) {
+  static async login(req, res) {
     try {
-      const { id } = req.params;
-      const deletedAdmin = await adminService.deleteAdmin(id);
-      if (!deletedAdmin) {
+      const { accountNumber, password } = req.body;
+      const admin = await adminService.login(accountNumber, password);
+
+      if (!admin) {
         return res
-          .status(404)
-          .json({ error: true, message: "Admin not found" });
+          .status(401)
+          .json({ error: true, message: "Invalid credentials" });
       }
-      return res.json(deletedAdmin);
+
+      const accessToken = Authorization.getAccessToken({ adminId: admin.id });
+
+      req.admin = admin;
+
+      return res.json({ message: "Login successful", accessToken });
     } catch (error) {
-      return res
-        .status(500)
-        .json({ error: true, message: "Failed to delete admin" });
+      return res.status(500).json({ error: true, message: "Failed to login" });
     }
   }
 }

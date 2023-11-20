@@ -1,32 +1,35 @@
 const mongoose = require("mongoose");
 
 const statusTypes = ["Active", "Deleted", "Inactive"];
+const roles = ["admin", "superadmin"];
 
 const AdminSchema = new mongoose.Schema({
-  id: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
-    unique: true,
-  },
-  account_id: {
+  accountNumber: {
     type: String,
     required: true,
     unique: true,
   },
-  first_name: {
+  firstname: {
     type: String,
     required: true,
   },
-  middle_name: {
+  middlename: {
     type: String,
+    required: false,
   },
-  last_name: {
+  lastname: {
     type: String,
     required: true,
   },
   password: {
     type: String,
     required: true,
+  },
+  role: {
+    type: String,
+    enum: roles,
+    required: false,
+    default: "admin"
   },
   status: {
     type: String,
@@ -35,15 +38,13 @@ const AdminSchema = new mongoose.Schema({
   },
   email: {
     type: String,
-    unique: true,
+    required: false,
   },
-  mobile_number: {
+  phone: {
     type: String,
+    required: false
   },
-  current_address: {
-    type: String,
-  },
-  permanent_address: {
+  address: {
     type: String,
   },
   create_date: {
