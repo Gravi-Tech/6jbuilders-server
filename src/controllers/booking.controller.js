@@ -1,33 +1,37 @@
 const BookingService = require("../services/booking.service");
 const bookingService = new BookingService();
-const emailService = require("../services/email.service");
 
 class BookingController {
-  constructor() {}
-
   static async createBooking(req, res) {
     try {
-      const { service_id, site_location, book_date, due_date, assignee_ids } =
-        req.body;
+      const {
+        service,
+        email,
+        fullName,
+        mobileNumber,
+        location,
+        scheduleDate,
+        selectedTimeRange,
+        type,
+      } = req.body;
 
       const newBookingData = {
-        service_id,
-        user_id: req.user._id,
-        site_location,
-        book_date,
-        due_date,
-        assignee_ids,
-        is_verified: false,
+        type,
+        service,
+        fullName,
+        mobileNumber,
+        email,
+        location,
+        createdDate: new Date(),
+        scheduleDate,
+        selectedTimeRange,
       };
 
       const newBooking = await bookingService.createBooking(newBookingData);
 
-      const { name, email } = req.user;
-
-      await emailService.sendVerificationEmail(name, email, newBooking._id);
-
       return res.json(newBooking);
     } catch (error) {
+      console.error(error);
       return res
         .status(500)
         .json({ error: true, message: "Failed to create booking" });
@@ -39,6 +43,7 @@ class BookingController {
       const bookings = await bookingService.getBookings();
       return res.json(bookings);
     } catch (error) {
+      console.error(error);
       return res
         .status(500)
         .json({ error: true, message: "Failed to fetch bookings" });
@@ -56,6 +61,7 @@ class BookingController {
       }
       return res.json(booking);
     } catch (error) {
+      console.error(error);
       return res
         .status(500)
         .json({ error: true, message: "Failed to fetch booking" });
@@ -67,31 +73,18 @@ class BookingController {
       const { id } = req.params;
       const updatedBookingData = req.body;
 
-      if (req.user.role === "Admin" && "is_verified" in updatedBookingData) {
-        const updatedBooking = await bookingService.updateBooking(
-          id,
-          updatedBookingData
-        );
-        if (!updatedBooking) {
-          return res
-            .status(404)
-            .json({ error: true, message: "Booking not found" });
-        }
-        return res.json(updatedBooking);
-      } else {
-        delete updatedBookingData.is_verified;
-        const updatedBooking = await bookingService.updateBooking(
-          id,
-          updatedBookingData
-        );
-        if (!updatedBooking) {
-          return res
-            .status(404)
-            .json({ error: true, message: "Booking not found" });
-        }
-        return res.json(updatedBooking);
+      const updatedBooking = await bookingService.updateBooking(
+        id,
+        updatedBookingData
+      );
+      if (!updatedBooking) {
+        return res
+          .status(404)
+          .json({ error: true, message: "Booking not found" });
       }
+      return res.json(updatedBooking);
     } catch (error) {
+      console.error(error);
       return res
         .status(500)
         .json({ error: true, message: "Failed to update booking" });
@@ -102,20 +95,15 @@ class BookingController {
     try {
       const { id } = req.params;
 
-      if (req.user.role === "Admin") {
-        const deletedBooking = await bookingService.deleteBooking(id);
-        if (!deletedBooking) {
-          return res
-            .status(404)
-            .json({ error: true, message: "Booking not found" });
-        }
-        return res.json(deletedBooking);
-      } else {
+      const deletedBooking = await bookingService.deleteBooking(id);
+      if (!deletedBooking) {
         return res
-          .status(403)
-          .json({ error: true, message: "Permission denied" });
+          .status(404)
+          .json({ error: true, message: "Booking not found" });
       }
+      return res.json({ message: "Booking deleted successfully" });
     } catch (error) {
+      console.error(error);
       return res
         .status(500)
         .json({ error: true, message: "Failed to delete booking" });

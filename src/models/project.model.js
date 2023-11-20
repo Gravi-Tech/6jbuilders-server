@@ -1,12 +1,5 @@
 const mongoose = require("mongoose");
 
-const projectTypes = [
-  "Residential Construction",
-  "Commercial Construction",
-  "Industrial Construction",
-  "Infrastructure Construction",
-];
-
 const ProjectSchema = new mongoose.Schema({
   id: {
     type: mongoose.Schema.Types.ObjectId,
@@ -17,11 +10,6 @@ const ProjectSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     required: true,
     ref: "Booking",
-  },
-  project_type: {
-    type: String,
-    enum: projectTypes,
-    required: true,
   },
   material_cost: {
     type: Number,

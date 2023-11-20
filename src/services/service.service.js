@@ -1,17 +1,15 @@
-const Service = require('../models/service.model');
+const Service = require("../models/service.model");
 
 class ServiceService {
   constructor() {}
 
-  async addService(serviceData, user) {
+  async addService(serviceData) {
     try {
       const serviceWithDefaultValues = {
         ...serviceData,
-        created_date: new Date(),
-        updated_date: new Date(),
-        updated_by: user._id
+        createdDate: new Date(),
+        updatedDate: new Date(),
       };
-
       const savedService = await Service.create(serviceWithDefaultValues);
       return { error: false, data: savedService };
     } catch (error) {
@@ -31,7 +29,9 @@ class ServiceService {
   async getServiceById(id) {
     try {
       const service = await Service.findById(id);
-      return service ? { error: false, data: service } : { error: true, data: null };
+      return service
+        ? { error: false, data: service }
+        : { error: true, data: null };
     } catch (error) {
       return { error: true, data: error };
     }
@@ -46,13 +46,13 @@ class ServiceService {
 
       const updatedService = await Service.findByIdAndUpdate(
         id,
-        { ...updatedServiceData,
-            updated_date: new Date()
-        },
+        { ...updatedServiceData, updated_date: new Date() },
         { new: true }
       );
 
-      return updatedService ? { error: false, data: updatedService } : { error: true, data: null };
+      return updatedService
+        ? { error: false, data: updatedService }
+        : { error: true, data: null };
     } catch (error) {
       return { error: true, data: error };
     }
@@ -61,7 +61,9 @@ class ServiceService {
   async deleteService(id) {
     try {
       const deletedService = await Service.findByIdAndDelete(id);
-      return deletedService ? { error: false, data: deletedService } : { error: true, data: null };
+      return deletedService
+        ? { error: false, data: deletedService }
+        : { error: true, data: null };
     } catch (error) {
       return { error: true, data: error };
     }
@@ -74,7 +76,9 @@ class ServiceService {
         { status },
         { new: true }
       );
-      return updatedService ? { error: false, data: updatedService } : { error: true, data: null };
+      return updatedService
+        ? { error: false, data: updatedService }
+        : { error: true, data: null };
     } catch (error) {
       return { error: true, data: error };
     }
