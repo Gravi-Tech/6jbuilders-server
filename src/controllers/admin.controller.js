@@ -1,7 +1,6 @@
 const AdminService = require("../services/admin.service");
 const adminService = new AdminService();
 const Authorization = require("../middlewares/authorization");
-const bcrypt = require("bcrypt");
 class AdminController {
   constructor() {}
 
@@ -76,9 +75,33 @@ class AdminController {
 
       req.admin = admin;
 
-      return res.json({ message: "Login successful", accessToken });
+      const adminDetails = await adminService.getAdminDetails(admin.id);
+      const { id } = adminDetails;
+
+      return res.json({
+        message: "Login successful",
+        accessToken,
+        id,
+      });
     } catch (error) {
       return res.status(500).json({ error: true, message: "Failed to login" });
+    }
+  }
+
+  static async checkAccountNumber(req, res) {
+    try {
+      const { accountNumber } = req.query;
+      const exists = await adminService.checkAccountNumber(accountNumber);
+      if (exists) {
+        return res.json({ message: "Account number exists" });
+      } else {
+        return res.json({ message: "Account number does not exist" });
+      }
+    } catch (error) {
+      console.error("Failed to check account number:", error);
+      return res
+        .status(500)
+        .json({ error: true, message: "Failed to check account number" });
     }
   }
 }

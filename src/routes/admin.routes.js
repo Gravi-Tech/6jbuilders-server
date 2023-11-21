@@ -10,4 +10,6 @@ router.post("/admins", Authorization.authorized, AdminController.addAdmin);
 router.get("/admins/:id", Authorization.authorized, AdminController.getAdminById);
 router.put("/admins/:id", Authorization.authorized, AdminController.updateAdmin);
 
+router.put("/admins/checkAccountNumber", Authorization.authorized, AdminController.checkAccountNumber);
+
 module.exports = router;
