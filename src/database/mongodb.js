@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const atlasUrl = "mongodb+srv://annamaejorge7:%40nn%40m%403j0rg3@cluster0.eww95vi.mongodb.net/";
+const atlasUrl = "mongodb+srv://annamaejorge7:%40nn%40m%403j0rg3@cluster0.eww95vi.mongodb.net/jbuildersdb";
 const localUrl = "mongodb://127.0.0.1/jbuilders-db";
 
 const useAtlas = true;
