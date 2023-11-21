@@ -24,6 +24,17 @@ class ServiceController {
     }
   }
 
+  static async getPublicServices(req, res) {
+    try {
+      const services = await serviceService.getPublicServices();
+      return res.json(services);
+    } catch (error) {
+      return res
+        .status(500)
+        .json({ error: true, message: "Failed to fetch public services" });
+    }
+  }
+
   static async getServiceById(req, res) {
     try {
       const { id: serviceId } = req.params;
@@ -58,6 +69,27 @@ class ServiceController {
       return res
         .status(500)
         .json({ error: true, message: "Failed to update service" });
+    }
+  }
+
+  static async updateServiceStatus(req, res) {
+    try {
+      const { id: serviceId } = req.params;
+      const { status } = req.body;
+      const updatedService = await serviceService.updateServiceStatus(
+        serviceId,
+        status
+      );
+      if (!updatedService) {
+        return res
+          .status(404)
+          .json({ error: true, message: "Service not found" });
+      }
+      return res.json(updatedService);
+    } catch (error) {
+      return res
+        .status(500)
+        .json({ error: true, message: "Failed to update service status" });
     }
   }
 
