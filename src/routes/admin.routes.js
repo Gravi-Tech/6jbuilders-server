@@ -1,13 +1,13 @@
 const express = require("express");
 const router = express.Router();
-const Authorization = require('../middlewares/authorization');
-const AdminController = require('../controllers/admin.controller');
-const { adminPermissions } = require('../middlewares/permissions');
+const Authorization = require("../middlewares/authorization");
+const AdminController = require("../controllers/admin.controller");
 
-router.get("/admins", Authorization.authorized, adminPermissions, AdminController.getAdmins);
-router.post("/admins", Authorization.authorized, adminPermissions, AdminController.addAdmin);
-router.get("/admins/:id", Authorization.authorized, adminPermissions, AdminController.getAdminById);
-router.put("/admins/:id", Authorization.authorized, adminPermissions, AdminController.updateAdmin);
-router.delete("/admins/:id", Authorization.authorized, adminPermissions, AdminController.deleteAdmin);
+router.post("/login", AdminController.login); 
+
+router.get("/admins", Authorization.authorized, AdminController.getAdmins);
+router.post("/admins", Authorization.authorized, AdminController.addAdmin);
+router.get("/admins/:id", Authorization.authorized, AdminController.getAdminById);
+router.put("/admins/:id", Authorization.authorized, AdminController.updateAdmin);
 
 module.exports = router;

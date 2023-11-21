@@ -1,11 +1,19 @@
 const Admin = require("../models/admin.model");
+const bcrypt = require("bcrypt");
 
 class AdminService {
   constructor() {}
 
   async addAdmin(adminData) {
     try {
-      const savedAdmin = await Admin.create(adminData);
+      const { password } = adminData;
+      const saltRounds = 10;
+      const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+      const savedAdmin = await Admin.create({
+        ...adminData,
+        password: hashedPassword,
+      });
       return { error: false, data: savedAdmin };
     } catch (error) {
       return { error: true, data: error };
@@ -53,14 +61,23 @@ class AdminService {
     }
   }
 
-  async deleteAdmin(id) {
+  async login(accountNumber, password) {
     try {
-      const deletedAdmin = await Admin.findByIdAndDelete(id);
-      return deletedAdmin
-        ? { error: false, data: deletedAdmin }
-        : { error: true, data: null };
+      const admin = await Admin.findOne({ accountNumber });
+
+      if (!admin) {
+        return null;
+      }
+
+      const passwordMatch = await bcrypt.compare(password, admin.password);
+
+      if (!passwordMatch) {
+        return null;
+      }
+
+      return admin;
     } catch (error) {
-      return { error: true, data: error };
+      throw new Error("Failed to login");
     }
   }
 }
