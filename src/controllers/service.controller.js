@@ -2,78 +2,79 @@ const ServiceService = require("../services/service.service");
 const serviceService = new ServiceService();
 
 class ServiceController {
-  constructor() {}
-
   static async addService(req, res) {
     try {
-      const newBooking = await serviceService.addService(req.body);
-      return res.json(newBooking);
+      const newService = await serviceService.addService(req.body);
+      return res.json(newService);
     } catch (error) {
       return res
         .status(500)
-        .json({ error: true, message: "Failed to add booking" });
+        .json({ error: true, message: "Failed to add service" });
     }
   }
 
   static async getServices(req, res) {
     try {
-      const bookings = await serviceService.getServices();
-      return res.json(bookings);
+      const services = await serviceService.getServices();
+      return res.json(services);
     } catch (error) {
       return res
         .status(500)
-        .json({ error: true, message: "Failed to fetch bookings" });
+        .json({ error: true, message: "Failed to fetch services" });
     }
   }
 
   static async getServiceById(req, res) {
     try {
-      const { id } = req.params;
-      const booking = await serviceService.getServiceById(id);
-      if (!booking) {
+      const { id: serviceId } = req.params;
+      const service = await serviceService.getServiceById(serviceId);
+      if (!service) {
         return res
           .status(404)
-          .json({ error: true, message: "Booking not found" });
+          .json({ error: true, message: "Service not found" });
       }
-      return res.json(booking);
+      return res.json(service);
     } catch (error) {
       return res
         .status(500)
-        .json({ error: true, message: "Failed to fetch booking" });
+        .json({ error: true, message: "Failed to fetch service" });
     }
   }
 
   static async updateService(req, res) {
     try {
-      const { id } = req.params;
-      const updatedBooking = await serviceService.updateService(id, req.body);
-      if (!updatedBooking) {
+      const { id: serviceId } = req.params;
+      const updatedService = await serviceService.updateService(
+        serviceId,
+        req.body
+      );
+      if (!updatedService) {
         return res
           .status(404)
-          .json({ error: true, message: "Booking not found" });
+          .json({ error: true, message: "Service not found" });
       }
-      return res.json(updatedBooking);
+      return res.json(updatedService);
     } catch (error) {
       return res
         .status(500)
-        .json({ error: true, message: "Failed to update booking" });
+        .json({ error: true, message: "Failed to update service" });
     }
   }
 
   static async deleteService(req, res) {
     try {
-      const { id } = req.params;
-      const deletedBooking = await serviceService.deleteService(id);
-      if (!deletedBooking) {
+      const { id: serviceId } = req.params;
+      const deletedService = await serviceService.deleteService(serviceId);
+      if (!deletedService) {
         return res
           .status(404)
-          .json({ error: true, message: "Booking not found" });
+          .json({ error: true, message: "Service not found" });
       }
-      return res.json(deletedBooking);
+      return res.json(deletedService);
     } catch (error) {
       return res
         .status(500)
-        .json({ error: true, message: "Failed to delete booking" });
+        .json({ error: true, message: "Failed to delete service" });
     }
   }
 }

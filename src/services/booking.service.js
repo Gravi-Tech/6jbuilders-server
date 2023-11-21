@@ -1,34 +1,33 @@
-const Booking = require("../models/user.model");
+const Booking = require("../models/booking.model");
 
 class BookingService {
-  constructor() {}
-
   async createBooking(bookingData) {
     try {
       const savedBooking = await Booking.create(bookingData);
       return { error: false, data: savedBooking };
     } catch (error) {
-      return { error: true, data: error };
+      console.error(error);
+      return { error: true, data: null, message: "Failed to create booking" };
     }
   }
 
   async getBookings() {
     try {
-      const bookingList = await Booking.find({});
-      return { error: false, data: bookingList };
+      const bookings = await Booking.find();
+      return { error: false, data: bookings };
     } catch (error) {
-      return { error: true, data: error };
+      console.error(error);
+      return { error: true, data: null, message: "Failed to fetch bookings" };
     }
   }
 
   async getBookingById(id) {
     try {
       const booking = await Booking.findById(id);
-      return booking
-        ? { error: false, data: booking }
-        : { error: true, data: null };
+      return { error: false, data: booking };
     } catch (error) {
-      return { error: true, data: error };
+      console.error(error);
+      return { error: true, data: null, message: "Failed to fetch booking" };
     }
   }
 
@@ -37,29 +36,22 @@ class BookingService {
       const updatedBooking = await Booking.findByIdAndUpdate(
         id,
         updatedBookingData,
-        {
-          new: true,
-        }
-      )
-        .populate("service_id")
-        .populate("user_id")
-        .populate("assignee_ids");
-      return updatedBooking
-        ? { error: false, data: updatedBooking }
-        : { error: true, data: null };
+        { new: true }
+      );
+      return { error: false, data: updatedBooking };
     } catch (error) {
-      return { error: true, data: error.message };
+      console.error(error);
+      return { error: true, data: null, message: "Failed to update booking" };
     }
   }
 
   async deleteBooking(id) {
     try {
       const deletedBooking = await Booking.findByIdAndDelete(id);
-      return deletedBooking
-        ? { error: false, data: deletedBooking }
-        : { error: true, data: null };
+      return { error: false, data: deletedBooking };
     } catch (error) {
-      return { error: true, data: error.message };
+      console.error(error);
+      return { error: true, data: null, message: "Failed to delete booking" };
     }
   }
 }
