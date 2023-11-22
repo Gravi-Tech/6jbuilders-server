@@ -1,37 +1,59 @@
 const mongoose = require("mongoose");
 
 const ProjectSchema = new mongoose.Schema({
-  id: {
+  task_id: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
-    unique: true,
+    ref: "Task",
   },
-  booking_id: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
-    ref: "Booking",
-  },
-  material_cost: {
-    type: Number,
-    required: true,
-  },
-  project_cost: {
-    type: Number,
-    required: true,
-  },
-  is_fullypaid: {
-    type: Boolean,
-    required: false,
-  },
-  total_payment: {
-    type: Number,
-    required: true,
-  },
-  status: {
+  title: {
     type: String,
-
     required: true,
   },
+  service: {
+    type: String,
+    required: true,
+  },
+  location: {
+    type: String,
+    required: true,
+  },
+  date_completed: {
+    type: Date,
+    required: true,
+  },
+  bg_project_img: {
+    type: String,
+    required: true,
+  },
+  project_imgs: [
+    {
+      type: String,
+      required: true,
+    },
+  ],
+  description: {
+    type: String,
+    required: true,
+  },
+  create_date: {
+    type: Date,
+    default: Date.now,
+  },
+  update_date: {
+    type: Date,
+    default: Date.now,
+  },
+});
+
+ProjectSchema.pre("save", async function (next) {
+  const task = await this.model("Task").findById(this.task_id);
+  if (task) {
+    this.service = task.service;
+    this.location = task.location;
+    this.date_completed = task.date_completed;
+  }
+  next();
 });
 
 const Project = mongoose.model("Project", ProjectSchema);

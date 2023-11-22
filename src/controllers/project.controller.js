@@ -28,8 +28,8 @@ class ProjectController {
 
   static async getProjectById(req, res) {
     try {
-      const { id } = req.params;
-      const project = await projectService.getProjectById(id);
+      const { id: projectId } = req.params;
+      const project = await projectService.getProjectById(projectId);
       if (!project) {
         return res
           .status(404)
@@ -45,8 +45,8 @@ class ProjectController {
 
   static async updateProject(req, res) {
     try {
-      const { id } = req.params;
-      const updatedProject = await projectService.updateProject(id, req.body);
+      const { id: projectId } = req.params;
+      const updatedProject = await projectService.updateProject(projectId, req.body);
       if (!updatedProject) {
         return res
           .status(404)
@@ -62,8 +62,8 @@ class ProjectController {
 
   static async deleteProject(req, res) {
     try {
-      const { id } = req.params;
-      const deletedProject = await projectService.deleteProject(id);
+      const { id: projectId } = req.params;
+      const deletedProject = await projectService.deleteProject(projectId);
       if (!deletedProject) {
         return res
           .status(404)

@@ -5,7 +5,12 @@ class ProjectService {
 
   async addProject(projectData) {
     try {
-      const savedProject = await Project.create(projectData);
+      const projectWithDefaultValues = {
+        ...projectData,
+        create_date: new Date(),
+        updated_date: new Date(),
+      };
+      const savedProject = await Project.create(projectWithDefaultValues);
       return { error: false, data: savedProject };
     } catch (error) {
       return { error: true, data: error };

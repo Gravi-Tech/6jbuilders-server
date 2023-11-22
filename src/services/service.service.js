@@ -46,7 +46,7 @@ class ServiceService {
 
       const updatedService = await Service.findByIdAndUpdate(
         id,
-        { ...updatedServiceData, updated_date: new Date() },
+        { ...updatedServiceData, updatedDate: new Date() },
         { new: true }
       );
 
