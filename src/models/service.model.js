@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 
+const statusTypes = ["available", "soon", "unavailable"];
+
 const ServiceSchema = new mongoose.Schema({
   title: {
     type: String,
@@ -9,6 +11,12 @@ const ServiceSchema = new mongoose.Schema({
   short_title: {
     type: String,
     required: false,
+  },
+  status: {
+    type: String,
+    enum: statusTypes,
+    required: false,
+    default: "available",
   },
   createdDate: {
     type: Date,

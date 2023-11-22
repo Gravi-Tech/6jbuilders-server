@@ -83,6 +83,17 @@ class ServiceService {
       return { error: true, data: error };
     }
   }
+
+  async getPublicServices() {
+    try {
+      const serviceList = await Service.find({
+        $or: [{ title: { $ne: "All" } }, { status: "available" }],
+      });
+      return { error: false, data: serviceList };
+    } catch (error) {
+      return { error: true, data: error };
+    }
+  }
 }
 
 module.exports = ServiceService;
