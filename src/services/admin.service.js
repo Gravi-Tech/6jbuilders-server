@@ -80,6 +80,26 @@ class AdminService {
       throw new Error("Failed to login");
     }
   }
+
+  async getAdminDetails(adminId) {
+    try {
+      const admin = await Admin.findById(adminId);
+      return admin;
+    } catch (error) {
+      throw new Error("Failed to fetch admin details");
+    }
+  }
+
+  async checkAccountNumber(accountNumber) {
+    try {
+      const existingAdmin = await Admin.findOne({ accountNumber });
+      const exists = !!existingAdmin;
+      return exists;
+    } catch (error) {
+      console.error("Failed to check account number:", error);
+      throw error;
+    }
+  }
 }
 
 module.exports = AdminService;
