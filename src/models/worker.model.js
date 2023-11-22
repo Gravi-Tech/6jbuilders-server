@@ -12,27 +12,23 @@ const WorkerSchema = new mongoose.Schema({
   },
  contact: {
     type: String,
-    enum: statusTypes,
     required: false,
   },
 
   address: {
       type: String,
-      enum: statusTypes,
       required: false,
     },
-
-    contact: {
+experience: {
       type: String,
-      enum: statusTypes,
       required: false,
     },
-
-  createdDate: {
+  
+  created_date: {
     type: Date,
     default: Date.now,
   },
-  updatedDate: {
+  updated_date: {
     type: Date,
     default: Date.now,
   },

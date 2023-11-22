@@ -68,16 +68,6 @@ class WorkerService {
       return { error: true, data: error };
     }
   }
-  async getPublicWorker() {
-    try {
-      const workerList = await Worker.find({
-        $or: [{ title: { $ne: "All" } }, { status: "available" }],
-      });
-      return { error: false, data: workerList };
-    } catch (error) {
-      return { error: true, data: error };
-    }
-  }
 }
 
 module.exports = WorkerService;

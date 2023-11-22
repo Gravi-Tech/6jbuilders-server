@@ -1,4 +1,4 @@
-const WorkerService = require("../worker/worker.service");
+const WorkerService = require("../services/worker.service");
 const workerService = new WorkerService();
 
 class WorkerController {
