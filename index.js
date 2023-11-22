@@ -43,6 +43,9 @@ app.use("/api", serviceRoutes);
 const userRoutes = require("./src/routes/user.routes");
 app.use("/api", userRoutes);
 
+const workerRoutes = require("./src/routes/worker.routes");
+app.use("/api", workerRoutes);
+
 app.listen(port, () => {
   console.log(`Listening on port ${port}`);
 });
