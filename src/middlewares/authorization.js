@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const tokenkey = "6jbuilders-key";
+
 class Authorization {
   constructor() {}
 
