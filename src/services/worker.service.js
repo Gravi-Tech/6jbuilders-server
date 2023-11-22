@@ -7,8 +7,8 @@ class WorkerService {
     try {
       const workerWithDefaultValues = {
         ...workerData,
-        createdDate: new Date(),
-        updatedDate: new Date(),
+        created_date: new Date(),
+        updated_date: new Date(),
       };
       const savedWorker = await Worker.create(workerWithDefaultValues);
       return { error: false, data: savedWorker };

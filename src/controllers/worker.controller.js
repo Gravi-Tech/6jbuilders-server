@@ -23,18 +23,6 @@ class WorkerController {
         .json({ error: true, message: "Failed to fetch worker" });
     }
   }
-
-  static async getPublicWorker(req, res) {
-    try {
-      const worker = await workerService.getPublicWorker();
-      return res.json(worker);
-    } catch (error) {
-      return res
-        .status(500)
-        .json({ error: true, message: "Failed to fetch public services" });
-    }
-  }
-
   static async getWorkerById(req, res) {
     try {
       const { id: workerId } = req.params;

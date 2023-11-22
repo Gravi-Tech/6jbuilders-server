@@ -4,7 +4,6 @@ const WorkerSchema = new mongoose.Schema({
   fullname: {
     type: String,
     required: true,
-    unique: true,
   },
  position: {
     type: String,
@@ -14,7 +13,6 @@ const WorkerSchema = new mongoose.Schema({
     type: String,
     required: false,
   },
-
   address: {
       type: String,
       required: false,
