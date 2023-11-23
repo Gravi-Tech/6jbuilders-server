@@ -45,6 +45,7 @@ class AdminController {
 
   static async updateAdmin(req, res) {
     try {
+      
       const { id } = req.params;
       const updatedAdmin = await adminService.updateAdmin(id, req.body);
       if (!updatedAdmin) {
@@ -90,7 +91,8 @@ class AdminController {
 
   static async checkAccountNumber(req, res) {
     try {
-      const { accountNumber } = req.query;
+      const { accountNumber } = await req.body;
+      console.log({accountNumber});
       const exists = await adminService.checkAccountNumber(accountNumber);
       if (exists) {
         return res.json({ message: "Account number exists" });
@@ -104,6 +106,25 @@ class AdminController {
         .json({ error: true, message: "Failed to check account number" });
     }
   }
+
+  static async checkEmail(req, res) {
+    try {
+      let exists = false;
+      const { email, oldEmail } = req.body;
+      if(email !== oldEmail){
+        exists = await adminService.checkEmail(email);
+      }
+      if (exists) {
+        return res.json({ message: "email account exists" });
+      }
+    } catch (error) {
+      console.error("Failed to check email account:", error);
+      return res
+        .status(500)
+        .json({ error: true, message: "Failed to check email account" });
+    }
+  }
+  
 }
 
 module.exports = AdminController;

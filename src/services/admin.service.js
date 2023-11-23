@@ -100,6 +100,17 @@ class AdminService {
       throw error;
     }
   }
+
+  async checkEmail(email) {
+    try {
+      const existingAdmin = await Admin.findOne({ email });
+      const exists = !!existingAdmin;
+      return exists;
+    } catch (error) {
+      console.error("Failed to check account number:", error);
+      throw error;
+    }
+  }
 }
 
 module.exports = AdminService;
