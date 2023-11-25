@@ -3,62 +3,55 @@ const Assignee = require("../models/assignee.model");
 class AssigneeService {
   constructor() {}
 
-  async addAssignee(assigneeData) {
+  async addAssigneeByTaskId(taskId, assigneeData) {
     try {
-      const savedAssignee = await Assignee.create(assigneeData);
+      const assignee = new Assignee({ task_id: taskId, assignees: [] });
+      for (const assigneeObj of assigneeData.assignees) {
+        const { worker_id } = assigneeObj;
+        assignee.assignees.push({ worker_id });
+      }
+      const savedAssignee = await assignee.save();
       return { error: false, data: savedAssignee };
     } catch (error) {
-      return { error: true, data: error };
-    }
-  }
-
-  async getAssignees() {
-    try {
-      const assigneeList = await Assignee.find({});
-      return { error: false, data: assigneeList };
-    } catch (error) {
-      return { error: true, data: error };
-    }
-  }
-
-  async getAssigneeById(id) {
-    try {
-      const assignee = await Assignee.findById(id);
-      return assignee
-        ? { error: false, data: assignee }
-        : { error: true, data: null };
-    } catch (error) {
-      return { error: true, data: error };
-    }
-  }
-
-  async updateAssignee(id, updatedAssigneeData) {
-    try {
-      const assignee = await Assignee.findById(id);
-      if (!assignee) {
-        return { error: true, data: "Assignee not found" };
+      if (
+        error.code === 11000 &&
+        error.keyValue &&
+        error.keyPattern &&
+        error.keyPattern.task_id === 1
+      ) {
+        return { error: true, message: "The task already has an assignee" };
       }
 
-      const updatedAssignee = await Assignee.findByIdAndUpdate(
-        id,
-        { ...updatedAssigneeData },
+      return {
+        error: true,
+        message: "Failed to add assignee by task ID",
+        data: error,
+      };
+    }
+  }
+
+  async getAssigneesByTaskId(taskId) {
+    try {
+      const assignees = await Assignee.find({ task_id: taskId });
+      return { error: false, data: assignees };
+    } catch (error) {
+      return { error: true, data: error };
+    }
+  }
+
+  async updateAssigneesByTaskId(taskId, updatedAssigneeData) {
+    try {
+      const assignees = updatedAssigneeData.worker_id.map((workerId) => ({
+        worker_id: workerId,
+      }));
+
+      const updatedAssignees = await Assignee.findOneAndUpdate(
+        { task_id: taskId },
+        { assignees },
         { new: true }
       );
 
-      return updatedAssignee
-        ? { error: false, data: updatedAssignee }
-        : { error: true, data: null };
-    } catch (error) {
-      return { error: true, data: error };
-    }
-  }
-
-  async deleteAssignee(id) {
-    try {
-      const deletedAssignee = await Assignee.findByIdAndDelete(id);
-      return deletedAssignee
-        ? { error: false, data: deletedAssignee }
-        : { error: true, data: null };
+      return { error: false, data: updatedAssignees };
     } catch (error) {
       return { error: true, data: error };
     }

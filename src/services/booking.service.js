@@ -48,7 +48,9 @@ class BookingService {
   async deleteBooking(id) {
     try {
       const deletedBooking = await Booking.findByIdAndDelete(id);
-      return { error: false, data: deletedBooking };
+      return deletedBooking
+        ? { error: false, data: null }
+        : { error: true, data: null };
     } catch (error) {
       console.error(error);
       return { error: true, data: null, message: "Failed to delete booking" };
