@@ -5,28 +5,32 @@ class BookingController {
   static async createBooking(req, res) {
     try {
       const {
-        service,
-        email,
-        fullName,
-        mobileNumber,
-        location,
-        scheduleDate,
-        selectedTimeRange,
         type,
-        note
+        service,
+        first_name,
+        middle_name,
+        last_name,
+        mobile_number,
+        email,
+        location,
+        schedule_date,
+        inspection_date,
+        note,
       } = req.body;
 
       const newBookingData = {
         type,
         service,
-        fullName,
-        mobileNumber,
+        first_name,
+        middle_name,
+        last_name,
+        mobile_number,
         email,
         location,
-        createdDate: new Date(),
-        scheduleDate,
-        selectedTimeRange,
-        note
+        date_created: new Date(),
+        schedule_date,
+        inspection_date,
+        note,
       };
 
       const newBooking = await bookingService.createBooking(newBookingData);
@@ -103,7 +107,7 @@ class BookingController {
           .status(404)
           .json({ error: true, message: "Booking not found" });
       }
-      return res.json({ message: "Booking deleted successfully" });
+      return res.json({ message: "Booking deleted successfully", data: null });
     } catch (error) {
       console.error(error);
       return res

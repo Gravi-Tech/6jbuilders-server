@@ -7,11 +7,19 @@ const BookingSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  fullName: {
+  first_name: {
     type: String,
     required: true,
   },
-  mobileNumber: {
+  middle_name: {
+    type: String,
+    required: false,
+  },
+  last_name: {
+    type: String,
+    required: true,
+  },
+  mobile_number: {
     type: String,
     required: true,
   },
@@ -27,22 +35,17 @@ const BookingSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  createdDate: {
+  date_created: {
     type: Date,
     required: true,
   },
-  scheduleDate: {
+  schedule_date: {
     type: Date,
     required: true,
   },
-  selectedTimeRange: {
+  inspection_date: {
     type: String,
     required: false,
-  },
-  isVisited: {
-    type: Boolean,
-    required: true,
-    default: false,
   },
   status: {
     type: String,
@@ -53,7 +56,7 @@ const BookingSchema = new mongoose.Schema({
     type: String,
     required: false,
   },
-  updated_date: {
+  date_updated: {
     type: Date,
     default: Date.now,
   },

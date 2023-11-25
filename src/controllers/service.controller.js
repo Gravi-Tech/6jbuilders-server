@@ -96,13 +96,15 @@ class ServiceController {
   static async deleteService(req, res) {
     try {
       const { id: serviceId } = req.params;
-      const deletedService = await serviceService.deleteService(serviceId);
-      if (!deletedService) {
+      const deletionResult = await serviceService.deleteService(serviceId);
+
+      if (!deletionResult.data) {
         return res
           .status(404)
           .json({ error: true, message: "Service not found" });
       }
-      return res.json(deletedService);
+
+      return res.json({ message: "Successfully deleted service", data: null });
     } catch (error) {
       return res
         .status(500)
