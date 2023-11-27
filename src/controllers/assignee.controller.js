@@ -54,6 +54,86 @@ class AssigneeController {
       });
     }
   }
+
+  // DO NOT USE
+  static async deleteAssigneeById(req, res) {
+    try {
+      const { assigneeId } = req.params;
+
+      const { taskId } = req.body;
+  
+      const assigneesResponse = await assigneeService.getAssigneesByTaskId(taskId);
+      if (assigneesResponse.error) {
+        console.error(assigneesResponse.data);
+        return res.status(500).json({
+          error: true,
+          message: "Failed to retrieve assignees",
+        });
+      }
+      const assignees = assigneesResponse.data;
+  
+      const updatedAssignees = assignees.map((assignee) => {
+        assignee.assignees = assignee.assignees.filter(
+          (assignee) => assignee.worker_id !== assigneeId
+        );
+        return assignee;
+      });
+  
+      const updateResult = await assigneeService.updateAssigneesByTaskId(
+        taskId,
+        updatedAssignees
+      );
+  
+      if (updateResult.error) {
+        console.error(updateResult.data);
+        return res.status(500).json({
+          error: true,
+          message: "Failed to delete assignee",
+        });
+      }
+  
+      return res.json({
+        success: true,
+        message: "Assignee deleted successfully",
+      });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({
+        error: true,
+        message: "Failed to delete assignee",
+      });
+    }
+  }
+
+  static async deleteTaskAssigneesById(req, res) {
+    try {
+      const { taskId } = req.params;
+
+      const assignees = await assigneeService.getAssigneesByTaskId(taskId);
+      if (assignees.error) {
+        console.error(assignees.data);
+        return res.status(500).json({
+          error: true,
+          message: "Failed to retrieve assignees for the task",
+        });
+      }
+
+      if (assignees.data.length > 0) {
+        await assigneeService.deleteTaskAssigneesById(taskId);
+      }
+
+      return res.json({
+        success: true,
+        message: "Task assignees deleted successfully",
+      });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({
+        error: true,
+        message: "Failed to delete task assignees by ID",
+      });
+    }
+  }
 }
 
 module.exports = AssigneeController;

@@ -115,7 +115,6 @@ class TaskController {
         return res.status(404).json({ error: true, message: "Task not found" });
       }
       if (task.data.status === "Cancelled") {
-        console.log("Task is already cancelled");
         return res
           .status(400)
           .json({ error: true, message: "Task is already cancelled" });
@@ -127,6 +126,7 @@ class TaskController {
         reasonId: reasonId,
         otherReason: otherReason,
         date_cancelled: new Date(),
+        date_started: null,
       };
 
       const updatedTask = await taskService.updateTask(taskId, updatedTaskData);
