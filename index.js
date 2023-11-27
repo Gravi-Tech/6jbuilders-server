@@ -1,7 +1,7 @@
-const express = require('express');
-const cors = require('cors');
-const bodyParser = require('body-parser');
-const MongoDB = require('./src/database/mongodb');
+const express = require("express");
+const cors = require("cors");
+const bodyParser = require("body-parser");
+const MongoDB = require("./src/database/mongodb");
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -10,38 +10,38 @@ db.connect();
 
 app.use(cors());
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({
-  extended: false
-}));
+app.use(
+  bodyParser.urlencoded({
+    extended: false,
+  })
+);
 
-const adminRoutes = require('./src/admin/routes/admin.routes');
-app.use('/api', adminRoutes);
+const adminRoutes = require("./src/routes/admin.routes");
+app.use("/api", adminRoutes);
 
-const assigneeRoutes = require('./src/assignee/routes/assignee.routes');
-app.use('/api', assigneeRoutes);
+const assigneeRoutes = require("./src/routes/assignee.routes");
+app.use("/api", assigneeRoutes);
 
-const bookingRoutes = require('./src/booking/routes/booking.routes');
-app.use('/api', bookingRoutes);
+const bookingRoutes = require("./src/routes/booking.routes");
+app.use("/api", bookingRoutes);
 
-const feedbackRoutes = require('./src/feedback/routes/feedback.routes');
-app.use('/api', feedbackRoutes);
+const projectRoutes = require("./src/routes/project.routes");
+app.use("/api", projectRoutes);
 
-const materialRoutes = require('./src/material/routes/material.routes');
-app.use('api', materialRoutes);
+const serviceRoutes = require("./src/routes/service.routes");
+app.use("/api", serviceRoutes);
 
-const notificationRoutes = require('./src/notification/routes/notification.routes');
-app.use('api', notificationRoutes);
+const taskRoutes = require("./src/routes/task.routes");
+app.use("/api", taskRoutes);
 
-const projectRoutes = require('./sr/project/routes/project.routes');
-app.use('/api', projectRoutes);
+const userRoutes = require("./src/routes/user.routes");
+app.use("/api", userRoutes);
 
-const serviceRoutes = require('./src/service/routes/service.routes');
-app.use('/api', serviceRoutes);
+const workerRoutes = require("./src/routes/worker.routes");
+app.use("/api", workerRoutes);
 
-const userRoutes = require('./src/user/routes/user.routes');
-app.use('/api', userRoutes);
-
-
+const reasonRoutes = require("./src/routes/reason.routes");
+app.use("/api", reasonRoutes);
 
 app.listen(port, () => {
   console.log(`Listening on port ${port}`);
