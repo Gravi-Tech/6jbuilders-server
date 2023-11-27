@@ -46,7 +46,7 @@ class ServiceService {
 
       const updatedService = await Service.findByIdAndUpdate(
         id,
-        { ...updatedServiceData, updated_date: new Date() },
+        { ...updatedServiceData, updatedDate: new Date() },
         { new: true }
       );
 
@@ -62,10 +62,10 @@ class ServiceService {
     try {
       const deletedService = await Service.findByIdAndDelete(id);
       return deletedService
-        ? { error: false, data: deletedService }
+        ? { error: false, data: null }
         : { error: true, data: null };
     } catch (error) {
-      return { error: true, data: error };
+      return { error: true, data: null };
     }
   }
 

@@ -1,56 +1,27 @@
 const mongoose = require("mongoose");
 
+const defaultAssigneeId = "655e3aad768532b925bee578";
 const AssigneeSchema = new mongoose.Schema({
-  id: {
+  task_id: {
     type: mongoose.Schema.Types.ObjectId,
+    ref: "Task",
     required: true,
     unique: true,
   },
-  booking_id: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Booking",
-    required: true,
-  },
-  project_type: {
-    type: String,
-    required: true,
-  },
-  title: {
-    type: String,
-    required: true,
-  },
-  description: {
-    type: String,
-    required: false,
-  },
-  material_ids: [
+  assignees: [
     {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Material",
-      required: true,
+      worker_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Worker",
+        required: true,
+      },
     },
   ],
-  material_cost: {
-    type: Number,
-    required: true,
-  },
-  project_cost: {
-    type: Number,
-    required: true,
-  },
-  is_fullypaid: {
-    type: Boolean,
-    required: false,
-  },
-  total_payment: {
-    type: Number,
-    required: true,
-  },
-  status: {
-    type: String,
-    required: true,
-  },
 });
+
+AssigneeSchema.path("assignees").default(() => [
+  { worker_id: defaultAssigneeId },
+]);
 
 const Assignee = mongoose.model("Assignee", AssigneeSchema);
 

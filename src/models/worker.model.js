@@ -1,27 +1,26 @@
 const mongoose = require("mongoose");
 const WorkerSchema = new mongoose.Schema({
-
-  fullname: {
+  fullName: {
     type: String,
     required: true,
   },
- position: {
+  position: {
     type: String,
     required: false,
   },
- contact: {
+  contact: {
     type: String,
     required: false,
   },
   address: {
-      type: String,
-      required: false,
-    },
-experience: {
-      type: String,
-      required: false,
-    },
-  
+    type: String,
+    required: false,
+  },
+  experience: {
+    type: String,
+    required: false,
+  },
+
   created_date: {
     type: Date,
     default: Date.now,
@@ -33,4 +32,4 @@ experience: {
 });
 
 const Worker = mongoose.model("Worker", WorkerSchema);
-module.exports =Worker;
+module.exports = Worker;

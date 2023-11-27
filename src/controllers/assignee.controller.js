@@ -4,79 +4,134 @@ const assigneeService = new AssigneeService();
 class AssigneeController {
   constructor() {}
 
-  static async addAssignee(req, res) {
+  static async addAssigneeByTaskId(req, res) {
     try {
-      const newAssignee = await assigneeService.addAssignee(req.body);
+      const { taskId } = req.params;
+      const newAssignee = await assigneeService.addAssigneeByTaskId(
+        taskId,
+        req.body
+      );
       return res.json(newAssignee);
     } catch (error) {
       return res
         .status(500)
-        .json({ error: true, message: "Failed to add assignee" });
+        .json({ error: true, message: "Failed to add assignee by task ID" });
     }
   }
 
-  static async getAssignees(req, res) {
+  static async getAssigneesByTaskId(req, res) {
     try {
-      const assignees = await assigneeService.getAssignees();
-      return res.json(assignees);
-    } catch (error) {
-      return res
-        .status(500)
-        .json({ error: true, message: "Failed to fetch assignees" });
-    }
-  }
+      const { taskId } = req.params;
+      const assignees = await assigneeService.getAssigneesByTaskId(taskId);
 
-  static async getAssigneeById(req, res) {
-    try {
-      const { id } = req.params;
-      const assignee = await assigneeService.getAssigneeById(id);
-      if (!assignee) {
-        return res
-          .status(404)
-          .json({ error: true, message: "Assignee not found" });
+      if (assignees.length > 0 && assignees[0].assignees.length > 0) {
+        const workerIds = assignees[0].assignees.map(
+          (assignee) => assignee.worker_id
+        );
+        return res.json({ assignees, workerIds });
+      } else {
+        return res.json({ assignees, workerIds: [] });
       }
-      return res.json(assignee);
     } catch (error) {
       return res
         .status(500)
-        .json({ error: true, message: "Failed to fetch assignee" });
+        .json({ error: true, message: "Failed to fetch assignees by task ID" });
     }
   }
 
-  static async updateAssignee(req, res) {
+  static async updateAssigneesByTaskId(req, res) {
     try {
-      const { id } = req.params;
-      const updatedAssignee = await assigneeService.updateAssignee(
-        id,
+      const { taskId } = req.params;
+      const updatedAssignees = await assigneeService.updateAssigneesByTaskId(
+        taskId,
         req.body
       );
-      if (!updatedAssignee) {
-        return res
-          .status(404)
-          .json({ error: true, message: "Assignee not found" });
-      }
-      return res.json(updatedAssignee);
+      return res.json(updatedAssignees);
     } catch (error) {
-      return res
-        .status(500)
-        .json({ error: true, message: "Failed to update assignee" });
+      return res.status(500).json({
+        error: true,
+        message: "Failed to update assignees by task ID",
+      });
     }
   }
 
-  static async deleteAssignee(req, res) {
+  // DO NOT USE
+  static async deleteAssigneeById(req, res) {
     try {
-      const { id } = req.params;
-      const deletedAssignee = await assigneeService.deleteAssignee(id);
-      if (!deletedAssignee) {
-        return res
-          .status(404)
-          .json({ error: true, message: "Assignee not found" });
+      const { assigneeId } = req.params;
+
+      const { taskId } = req.body;
+  
+      const assigneesResponse = await assigneeService.getAssigneesByTaskId(taskId);
+      if (assigneesResponse.error) {
+        console.error(assigneesResponse.data);
+        return res.status(500).json({
+          error: true,
+          message: "Failed to retrieve assignees",
+        });
       }
-      return res.json(deletedAssignee);
+      const assignees = assigneesResponse.data;
+  
+      const updatedAssignees = assignees.map((assignee) => {
+        assignee.assignees = assignee.assignees.filter(
+          (assignee) => assignee.worker_id !== assigneeId
+        );
+        return assignee;
+      });
+  
+      const updateResult = await assigneeService.updateAssigneesByTaskId(
+        taskId,
+        updatedAssignees
+      );
+  
+      if (updateResult.error) {
+        console.error(updateResult.data);
+        return res.status(500).json({
+          error: true,
+          message: "Failed to delete assignee",
+        });
+      }
+  
+      return res.json({
+        success: true,
+        message: "Assignee deleted successfully",
+      });
     } catch (error) {
-      return res
-        .status(500)
-        .json({ error: true, message: "Failed to delete assignee" });
+      console.error(error);
+      return res.status(500).json({
+        error: true,
+        message: "Failed to delete assignee",
+      });
+    }
+  }
+
+  static async deleteTaskAssigneesById(req, res) {
+    try {
+      const { taskId } = req.params;
+
+      const assignees = await assigneeService.getAssigneesByTaskId(taskId);
+      if (assignees.error) {
+        console.error(assignees.data);
+        return res.status(500).json({
+          error: true,
+          message: "Failed to retrieve assignees for the task",
+        });
+      }
+
+      if (assignees.data.length > 0) {
+        await assigneeService.deleteTaskAssigneesById(taskId);
+      }
+
+      return res.json({
+        success: true,
+        message: "Task assignees deleted successfully",
+      });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({
+        error: true,
+        message: "Failed to delete task assignees by ID",
+      });
     }
   }
 }

@@ -25,26 +25,23 @@ app.use("/api", assigneeRoutes);
 const bookingRoutes = require("./src/routes/booking.routes");
 app.use("/api", bookingRoutes);
 
-const feedbackRoutes = require("./src/routes/feedback.routes");
-app.use("/api", feedbackRoutes);
-
-const materialRoutes = require("./src/routes/material.routes");
-app.use("api", materialRoutes);
-
-const notificationRoutes = require("./src/routes/notification.routes");
-app.use("api", notificationRoutes);
-
 const projectRoutes = require("./src/routes/project.routes");
 app.use("/api", projectRoutes);
 
 const serviceRoutes = require("./src/routes/service.routes");
 app.use("/api", serviceRoutes);
 
+const taskRoutes = require("./src/routes/task.routes");
+app.use("/api", taskRoutes);
+
 const userRoutes = require("./src/routes/user.routes");
 app.use("/api", userRoutes);
 
 const workerRoutes = require("./src/routes/worker.routes");
 app.use("/api", workerRoutes);
+
+const reasonRoutes = require("./src/routes/reason.routes");
+app.use("/api", reasonRoutes);
 
 app.listen(port, () => {
   console.log(`Listening on port ${port}`);
