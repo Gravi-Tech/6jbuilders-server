@@ -14,7 +14,6 @@ class BookingController {
         email,
         location,
         schedule_date,
-        inspection_date,
         note,
       } = req.body;
 
@@ -29,7 +28,6 @@ class BookingController {
         location,
         date_created: new Date(),
         schedule_date,
-        inspection_date,
         note,
       };
 
@@ -97,6 +95,40 @@ class BookingController {
     }
   }
 
+  static async rejectBooking(req, res) {
+    try {
+      const { id: bookingId } = req.params;
+      const booking = await bookingService.getBookingById(bookingId);
+      if (!booking) {
+        return res
+          .status(404)
+          .json({ error: true,status: 404, message: "Booking not found" });
+      }
+
+      if (booking.data.status === "Rejected") {
+        return res
+          .status(400)
+          .json({ error: true, message: "Booking is already rejected." });
+      }
+
+      const updatedBookingData = {
+        status: "Rejected",
+        isRejected: true,
+        date_rejected: new Date(),
+      };
+
+      const updatedBooking = await bookingService.updateBooking(
+        bookingId,
+        updatedBookingData
+      );
+      return res.json(updatedBooking);
+    } catch (error) {
+      return res
+        .status(500)
+        .json({ error: true, message: "Failed to reject booking" });
+    }
+  }
+
   static async deleteBooking(req, res) {
     try {
       const { id } = req.params;
@@ -113,6 +145,22 @@ class BookingController {
       return res
         .status(500)
         .json({ error: true, message: "Failed to delete booking" });
+    }
+  }
+
+  static async checkBookingStatus(req, res) {
+    try {
+      const { id: bookingId } = req.params;
+      const booking = await bookingService.getBookingById(bookingId);
+      if (!booking || booking.error) {
+        return res.status(404).json({ error: true, message: "Task not found" });
+      }
+      const status = booking.data.status;
+      return res.json({ error: false, data: status });
+    } catch (error) {
+      return res
+        .status(500)
+        .json({ error: true, message: "Failed to fetch booking status" });
     }
   }
 }

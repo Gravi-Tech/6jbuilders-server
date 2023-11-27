@@ -56,6 +56,48 @@ class AssigneeService {
       return { error: true, data: error };
     }
   }
+
+  async deleteAssigneeById(assigneeId) {
+    try {
+      const deletedAssignee = await Assignee.updateMany(
+        { "assignees._id": assigneeId },
+        { $pull: { assignees: { _id: assigneeId } } },
+        { multi: true }
+      );
+
+      if (deletedAssignee.nModified > 0) {
+        return { error: false, message: "Assignee deleted successfully" };
+      } else {
+        return { error: true, message: "Assignee not found" };
+      }
+    } catch (error) {
+      return {
+        error: true,
+        message: "Failed to delete assignee by ID",
+        data: error,
+      };
+    }
+  }
+
+  async deleteTaskAssigneesById(taskId) {
+    try {
+      const deletedAssignees = await Assignee.deleteMany({ task_id: taskId });
+      if (deletedAssignees.deletedCount > 0) {
+        return { error: false, message: "Task assignees deleted successfully" };
+      } else {
+        return {
+          error: false,
+          message: "No task assignees found for the given task ID",
+        };
+      }
+    } catch (error) {
+      return {
+        error: true,
+        message: "Failed to delete task assignees by ID",
+        data: error,
+      };
+    }
+  }
 }
 
 module.exports = AssigneeService;
