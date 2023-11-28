@@ -43,6 +43,12 @@ app.use("/api", workerRoutes);
 const reasonRoutes = require("./src/routes/reason.routes");
 app.use("/api", reasonRoutes);
 
+const positionRoutes = require("./src/routes/position.routes");
+app.use("/api", positionRoutes);
+
+const dataTypeRoutes = require("./src/routes/data_type.routes");
+app.use("/api", dataTypeRoutes);
+
 app.listen(port, () => {
   console.log(`Listening on port ${port}`);
 });
