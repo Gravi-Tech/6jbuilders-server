@@ -30,7 +30,7 @@ class WorkerController {
       if (!worker) {
         return res
           .status(404)
-          .json({ error: true, message: "Service not found" });
+          .json({ error: true, message: "Worker not found" });
       }
       return res.json(worker);
     } catch (error) {
