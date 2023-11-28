@@ -1,35 +1,41 @@
 const mongoose = require("mongoose");
 
 const ProjectSchema = new mongoose.Schema({
-  id: {
+  taskId: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
-    unique: true,
+    ref: "Task",
   },
-  booking_id: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
-    ref: "Booking",
-  },
-  material_cost: {
-    type: Number,
-    required: true,
-  },
-  project_cost: {
-    type: Number,
-    required: true,
-  },
-  is_fullypaid: {
-    type: Boolean,
-    required: false,
-  },
-  total_payment: {
-    type: Number,
-    required: true,
-  },
-  status: {
+  title: {
     type: String,
-
+    required: true,
+  },
+  location: {
+    type: String,
+    required: true,
+  },
+  bg_img: {
+    type: String,
+    required: true,
+  },
+  project_imgs: [
+    {
+      type: String,
+      required: true,
+    },
+  ],
+  date_completed: {
+    type: String,
+    required: true,
+  },
+  description: [
+    {
+      type: String,
+      required: true,
+    },
+  ],
+  service: {
+    type: String,
     required: true,
   },
 });
