@@ -46,7 +46,7 @@ class PositionService {
 
       const updatedPosition = await Position.findByIdAndUpdate(
         id,
-        { ...updatedPositionData, updated_date: new Date() },
+        { ...updatedPositionData, date_updated: new Date() },
         { new: true }
       );
 

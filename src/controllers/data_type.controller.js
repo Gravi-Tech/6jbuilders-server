@@ -28,26 +28,22 @@ class DataTypeController {
 
   static async getTypeById(req, res) {
     try {
-      const { typeId } = req.params;
+      const { id: typeId } = req.params;
       const type = await dataTypeService.getTypeById(typeId);
       if (!type) {
-        return res
-          .status(404)
-          .json({ status: 404, error: true, message: "Data type not found" });
+        return res.status(404).json({ error: true, message: "Type not found" });
       }
       return res.json(type);
     } catch (error) {
-      return res.status(500).json({
-        status: 500,
-        error: true,
-        message: "Failed to fetch type",
-      });
+      return res
+        .status(500)
+        .json({ error: true, message: "Failed to fetch data type" });
     }
   }
 
   static async updateType(req, res) {
     try {
-      const { typeId } = req.params;
+      const { id: typeId } = req.params;
       const updatedType = await dataTypeService.updateType(typeId, req.body);
       if (!updatedType) {
         return res
@@ -56,35 +52,27 @@ class DataTypeController {
       }
       return res.json(updatedType);
     } catch (error) {
-      return res.status(500).json({
-        status: 500,
-        error: true,
-        message: "Failed to update data type",
-      });
+      return res
+        .status(500)
+        .json({ error: true, message: "Failed to update data type" });
     }
   }
 
   static async deleteType(req, res) {
     try {
-      const { typeId } = req.params;
-      const deletionResult = await dataTypeService.deleteType(typeId);
-
-      if (!deletionResult.data) {
+      const { id: typeId } = req.params;
+      const deletedType = await dataTypeService.deleteType(typeId);
+      if (!deletedType) {
         return res
           .status(404)
-          .json({ status: 404, error: true, message: "Data type not found" });
+          .json({ error: true, message: "Data Type not found" });
       }
-
-      return res.json({
-        status: 200,
-        message: "Successfully deleted data type",
-        data: null,
-      });
+      return res.json(deletedType);
     } catch (error) {
       return res.status(500).json({
         status: 500,
         error: true,
-        message: "Failed to delete data type",
+        message: "Failed to delete data",
       });
     }
   }
