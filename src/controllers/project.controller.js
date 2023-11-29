@@ -9,11 +9,11 @@ class ProjectController {
 
   static async addProject(req, res) {
     try {
-      const { taskId, title, description } = req.body.data;
+      const { taskId, title, description } = req.body;
 
       console.log("Request Body:", req.body);
 
-      const task = await Task.findById(new mongoose.Types.ObjectId(taskId));
+      const task = await Task.findById(taskId);
       if (!task) {
         console.log("Task not found");
         return res.status(404).json({ error: true, message: "Task not found" });
@@ -21,8 +21,10 @@ class ProjectController {
 
       const { location, date_completed, service } = task;
 
-      const bg_img = req.file ? req.file.path : null;
-      const project_imgs = req.files ? req.files.map((file) => file.path) : [];
+      const bg_img = req.file ? req.file.filename : null;
+      const project_imgs = req.files
+        ? req.files.map((file) => file.filename)
+        : [];
 
       const newProject = await projectService.addProject({
         taskId,

@@ -1,8 +1,10 @@
 const multer = require("multer");
+const path = require("path");
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "uploads/");
+    const destinationPath = path.join(__dirname, "../public/uploads");
+    cb(null, destinationPath);
   },
   filename: function (req, file, cb) {
     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
@@ -18,7 +20,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 const uploadSingleImage = (req, res, next) => {
-  upload.single("image")(req, res, (err) => {
+  upload.single("bg_img")(req, res, (err) => {
     if (err) {
       return res
         .status(400)
@@ -29,7 +31,7 @@ const uploadSingleImage = (req, res, next) => {
 };
 
 const uploadMultipleImages = (req, res, next) => {
-  upload.array("images")(req, res, (err) => {
+  upload.array("project_imgs", 5)(req, res, (err) => {
     if (err) {
       return res
         .status(400)
