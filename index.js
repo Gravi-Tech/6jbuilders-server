@@ -15,7 +15,8 @@ app.use(
     extended: false,
   })
 );
-
+const path = require('path')
+app.use(express.static(path.join(__dirname, 'public')))
 const adminRoutes = require("./src/routes/admin.routes");
 app.use("/api", adminRoutes);
 
@@ -48,6 +49,9 @@ app.use("/api", positionRoutes);
 
 const dataTypeRoutes = require("./src/routes/data_type.routes");
 app.use("/api", dataTypeRoutes);
+
+const fileUploadRoutes = require("./src/routes/fileupload.routes");
+app.use("/api", fileUploadRoutes);
 
 app.listen(port, () => {
   console.log(`Listening on port ${port}`);

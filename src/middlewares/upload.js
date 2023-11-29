@@ -1,44 +1,15 @@
-const multer = require("multer");
-const path = require("path");
-
+const multer = require('multer');
+const path = require('path');
+const filepath = path.join(__dirname, '../../public/uploads')
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    const destinationPath = path.join(__dirname, "../public/uploads");
-    cb(null, destinationPath);
+    cb(null, filepath);
   },
   filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    const extension = file.originalname.split(".").pop();
-    const filename = uniqueSuffix + "." + extension;
-
-    console.log("Uploaded Filename:", filename);
-
-    cb(null, filename);
+    console.log('🚀 ~ file: upload.js:9 ~ req:', req.files);
+    console.log('🚀 ~ file: upload.js:6 ~ file:', file);
+    cb(null, file.originalname);
   },
 });
 
-const upload = multer({ storage });
-
-const uploadSingleImage = (req, res, next) => {
-  upload.single("bg_img")(req, res, (err) => {
-    if (err) {
-      return res
-        .status(400)
-        .json({ error: true, message: "Failed to upload image" });
-    }
-    next();
-  });
-};
-
-const uploadMultipleImages = (req, res, next) => {
-  upload.array("project_imgs", 5)(req, res, (err) => {
-    if (err) {
-      return res
-        .status(400)
-        .json({ error: true, message: "Failed to upload images" });
-    }
-    next();
-  });
-};
-
-module.exports = { uploadSingleImage, uploadMultipleImages };
+module.exports = multer({ storage: storage });
