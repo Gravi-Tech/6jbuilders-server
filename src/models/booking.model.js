@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const bookStatus = ["Pending", "Rejected"];
+const bookStatus = ["Pending", "Rejected", "Accepted"];
 
 const BookingSchema = new mongoose.Schema({
   type: {
@@ -52,6 +52,11 @@ const BookingSchema = new mongoose.Schema({
     type: Date,
     required: false,
     default: null,
+  },
+  isAccepted: {
+    type: Boolean,
+    required: true,
+    default: false,
   },
   status: {
     type: String,

@@ -23,6 +23,7 @@ class PositionController {
         .json({ error: true, message: "Failed to fetch position" });
     }
   }
+  
   static async getPositionById(req, res) {
     try {
       const { id: positionId } = req.params;

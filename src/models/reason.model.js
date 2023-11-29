@@ -13,7 +13,7 @@ const ReasonSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-  date_upated: {
+  date_updated: {
     type: Date,
     default: Date.now,
   },

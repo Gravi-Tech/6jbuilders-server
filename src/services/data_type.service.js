@@ -30,31 +30,31 @@ class DataTypeService {
     try {
       const type = await DataType.findById(id);
       return type
-        ? { status: 200, data: type }
-        : { status: 400, data: null };
+        ? { status: 200, error: false, data: type }
+        : { status: 404, error: true, data: null };
     } catch (error) {
-      return { status: 400, data: error };
+      return { status: 500, error: true, data: error };
     }
   }
 
-  async updateType(id, updatedType) {
+  async updateType(id, updatedTypeData) {
     try {
       const type = await DataType.findById(id);
       if (!type) {
-        return { status: 400, data: "Data type not found" };
+        return { error: true, data: "Type not found" };
       }
 
       const updatedType = await DataType.findByIdAndUpdate(
         id,
-        { ...updatedType, date_updated: new Date() },
+        { ...updatedTypeData, date_updated: new Date() },
         { new: true }
       );
 
       return updatedType
-        ? { status: 200, data: updatedType }
-        : { status: 400, data: null };
+        ? { status: 200, error: false, data: updatedType }
+        : { error: true, data: null };
     } catch (error) {
-      return { status: 400, data: error };
+      return { status: 500, error: true, data: error };
     }
   }
 
@@ -62,10 +62,10 @@ class DataTypeService {
     try {
       const deletedType = await DataType.findByIdAndDelete(id);
       return deletedType
-        ? { status: 200, data: null }
-        : { status: 400, data: null };
+        ? { status: 200, error: false, data: null }
+        : { error: true, data: null };
     } catch (error) {
-      return { status: 400, data: null };
+      return { status: 400, error: true, data: error };
     }
   }
 }
