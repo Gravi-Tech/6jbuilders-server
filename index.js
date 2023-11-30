@@ -53,6 +53,9 @@ app.use("/api", dataTypeRoutes);
 const fileUploadRoutes = require("./src/routes/fileupload.routes");
 app.use("/api", fileUploadRoutes);
 
+const feedbackRoutes = require("./src/routes/feedback.routes");
+app.use("/api", feedbackRoutes);
+
 app.listen(port, () => {
   console.log(`Listening on port ${port}`);
 });

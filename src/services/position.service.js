@@ -7,8 +7,8 @@ class PositionService {
     try {
       const positionWithDefaultValues = {
         ...positionData,
-        created_date: new Date(),
-        updated_date: new Date(),
+        date_created: new Date(),
+        date_updated: new Date(),
       };
       const savedPosition = await Position.create(positionWithDefaultValues);
       return { error: false, data: savedPosition };
