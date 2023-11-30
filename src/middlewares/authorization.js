@@ -28,19 +28,24 @@ class Authorization {
       const tokenValue = token.split(" ")[1];
       jwt.verify(tokenValue, tokenkey, (err, decoded) => {
         if (err) {
-          return res.status(403).json({
-            error: true,
-            message: "You are forbidden.",
-          });
+          if (err.name === "TokenExpiredError") {
+            return res
+              .status(401)
+              .json({ error: true, message: "Access token expired" });
+          } else {
+            return res
+              .status(403)
+              .json({ error: true, message: "You are forbidden." });
+          }
         }
+
         req.admin = decoded.data;
         next();
       });
     } else {
-      return res.status(401).json({
-        error: true,
-        message: "You are not authenticated.",
-      });
+      return res
+        .status(401)
+        .json({ error: true, message: "You are not authenticated." });
     }
   }
 }
