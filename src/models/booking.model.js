@@ -43,6 +43,11 @@ const BookingSchema = new mongoose.Schema({
     type: Date,
     required: true,
   },
+  isAccepted: {
+    type: Boolean,
+    required: true,
+    default: false,
+  },
   isRejected: {
     type: Boolean,
     required: true,
