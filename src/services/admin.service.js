@@ -10,8 +10,13 @@ class AdminService {
       const saltRounds = 10;
       const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-      const savedAdmin = await Admin.create({
+      const params = {
         ...adminData,
+        status: adminData.status.length < 6 ? 'Active': adminData.status,
+      }
+
+      const savedAdmin = await Admin.create({
+        ...params,
         password: hashedPassword,
       });
       return { error: false, data: savedAdmin };
