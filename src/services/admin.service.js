@@ -10,8 +10,13 @@ class AdminService {
       const saltRounds = 10;
       const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-      const savedAdmin = await Admin.create({
+      const params = {
         ...adminData,
+        status: adminData.status.length < 6 ? 'Active': adminData.status,
+      }
+
+      const savedAdmin = await Admin.create({
+        ...params,
         password: hashedPassword,
       });
       return { error: false, data: savedAdmin };
@@ -101,13 +106,31 @@ class AdminService {
     }
   }
 
-  async checkEmail(email) {
+  async verifyPassword(password, currentPassword) {
     try {
-      const existingAdmin = await Admin.findOne({ email });
-      const exists = !!existingAdmin;
-      return exists;
+      const isPasswordValid = await bcrypt.compare(currentPassword, password);
+      return isPasswordValid;
     } catch (error) {
-      console.error("Failed to check account number:", error);
+      throw error;
+    }
+  }
+
+  async updateAdminPassword(admin, newPassword) {
+    try {
+      const saltRounds = 10;
+      const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
+
+      const updatedAdmin = await Admin.findByIdAndUpdate(
+        admin._id,
+        { password: hashedPassword },
+        { new: true }
+      );
+
+      return updatedAdmin
+        ? { error: false, data: updatedAdmin }
+        : { error: true, data: null };
+    } catch (error) {
+      console.error("Failed to update admin password:", error);
       throw error;
     }
   }
