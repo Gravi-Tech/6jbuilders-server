@@ -7,7 +7,7 @@ const port = process.env.PORT || 3000;
 
 const corsOptions = {
   origin: [
-    'https://6jbuilders.netlify.app/',
+    'https://6jbuilders.netlify.app',
     'http://localhost:4000'
   ]
 }
