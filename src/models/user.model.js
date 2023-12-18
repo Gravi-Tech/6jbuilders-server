@@ -1,35 +1,21 @@
 const mongoose = require("mongoose");
 
-const clientTypes = [
-  "Individual",
-  "Company",
-  "Contractor",
-  "Architect",
-  "Other",
-];
-
 const UsersSchema = new mongoose.Schema({
-  id: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
-    unique: true,
-  },
-  client_type: {
+  first_name: {
     type: String,
-    enum: clientTypes,
+    required: true,
+  },
+  middle_name: {
+    type: String,
     required: false,
   },
-  fullname: {
+  last_name: {
     type: String,
     required: true,
   },
   mobile_number: {
     type: String,
     required: true,
-  },
-  gender: {
-    type: String,
-    required: false,
   },
   password: {
     type: String,
@@ -46,10 +32,13 @@ const UsersSchema = new mongoose.Schema({
   isVerified: {
     type: Boolean,
     required: false,
+    default: false,
   },
   status: {
     type: String,
-    required: false,
+    enum: ["Active", "Inactive"],
+    required: true,
+    default: "Active",
   },
   created_date: {
     type: Date,

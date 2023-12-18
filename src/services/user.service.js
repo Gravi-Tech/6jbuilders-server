@@ -1,16 +1,54 @@
 const Users = require("../models/user.model");
+const bcrypt = require("bcrypt");
 
 module.exports = class UserService {
   constructor() {}
 
   async addUser(user) {
     try {
-      const saved = await Users.create(user);
+      const { password } = user;
+      const saltRounds = 10;
+      const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+      const saved = await Users.create({
+        ...user,
+        password: hashedPassword,
+      });
       return { error: false, data: saved };
     } catch (error) {
       return { error: true, data: error };
     }
   }
+
+  async login(mobile_number, password) {
+    try {
+      const user = await Users.findOne({ mobile_number });
+
+      if (!user) {
+        return null;
+      }
+
+      const passwordMatch = await bcrypt.compare(password, user.password);
+
+      if (!passwordMatch) {
+        return null;
+      }
+
+      return user;
+    } catch (error) {
+      throw new Error("Failed to login");
+    }
+  }
+
+  async getUserDetails(userId) {
+    try {
+      const user = await Users.findById(userId);
+      return user;
+    } catch (error) {
+      throw new Error("Failed to fetch user details");
+    }
+  }
+
 
   async getUsers() {
     try {

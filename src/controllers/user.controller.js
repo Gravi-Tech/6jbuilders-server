@@ -17,13 +17,6 @@ class UserController {
 
   static async getUsers(req, res) {
     try {
-      if (req.user.role !== "Admin") {
-        return res.json({
-          error: true,
-          message: "You do not have permission to get all users.",
-        });
-      }
-
       const users = await service.getUsers();
       return res.json(users);
     } catch (error) {
@@ -33,15 +26,33 @@ class UserController {
     }
   }
 
-  static async getUserById(req, res) {
+  static async login(req, res) {
     try {
-      if (req.user.role !== "Admin") {
-        return res.json({
-          error: true,
-          message: "You do not have permission to get a user by ID.",
-        });
+      const { mobile_number, password } = req.body;
+      const user = await service.login(mobile_number, password);
+
+      if (!user) {
+        return res
+          .status(401)
+          .json({ error: true, message: "Invalid credentials" });
       }
 
+      req.user = user;
+
+      const userDetails = await service.getUserDetails(user.id);
+      const { id } = userDetails;
+
+      return res.json({
+        message: "Login successful",
+        id,
+      });
+    } catch (error) {
+      return res.status(500).json({ error: true, message: "Failed to login" });
+    }
+  }
+
+  static async getUserById(req, res) {
+    try {
       const { id } = req.params;
       const user = await service.getUserById(id);
       if (!user) {
@@ -57,13 +68,6 @@ class UserController {
 
   static async updateUser(req, res) {
     try {
-      if (req.user.role !== "Admin") {
-        return res.json({
-          error: true,
-          message: "You do not have permission to update users.",
-        });
-      }
-
       const { id } = req.params;
       const updatedUser = await service.updateUser(id, req.body);
       if (!updatedUser) {
@@ -79,13 +83,6 @@ class UserController {
 
   static async deleteUser(req, res) {
     try {
-      if (req.user.role !== "Admin") {
-        return res.json({
-          error: true,
-          message: "You do not have permission to delete users.",
-        });
-      }
-
       const { id } = req.params;
       const deletedUser = await service.deleteUser(id);
       if (!deletedUser) {
