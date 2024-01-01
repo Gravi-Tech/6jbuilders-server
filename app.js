@@ -5,17 +5,27 @@ const MongoDB = require("./src/database/mongodb");
 const app = express();
 const port = process.env.PORT || 3000;
 
+const corsOptions = {
+  origin: [
+    'https://6jbuilders.netlify.app',
+    'http://localhost:4000'
+  ]
+}
+
 const db = new MongoDB();
 db.connect();
 
-app.use(cors());
+
+
+app.use(cors(corsOptions));
 app.use(bodyParser.json());
 app.use(
   bodyParser.urlencoded({
     extended: false,
   })
 );
-
+const path = require('path')
+app.use(express.static(path.join(__dirname, 'public')))
 const adminRoutes = require("./src/routes/admin.routes");
 app.use("/api", adminRoutes);
 
@@ -42,6 +52,18 @@ app.use("/api", workerRoutes);
 
 const reasonRoutes = require("./src/routes/reason.routes");
 app.use("/api", reasonRoutes);
+
+const positionRoutes = require("./src/routes/position.routes");
+app.use("/api", positionRoutes);
+
+const dataTypeRoutes = require("./src/routes/data_type.routes");
+app.use("/api", dataTypeRoutes);
+
+const fileUploadRoutes = require("./src/routes/fileupload.routes");
+app.use("/api", fileUploadRoutes);
+
+const feedbackRoutes = require("./src/routes/feedback.routes");
+app.use("/api", feedbackRoutes);
 
 app.listen(port, () => {
   console.log(`Listening on port ${port}`);

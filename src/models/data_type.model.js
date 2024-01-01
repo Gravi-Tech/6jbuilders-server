@@ -1,13 +1,14 @@
 const mongoose = require("mongoose");
 
-const ReasonSchema = new mongoose.Schema({
-  reason: {
+const DataTypeSchema = new mongoose.Schema({
+  title: {
     type: String,
     required: true,
+    unique: true,
   },
-  description: {
+  short_title: {
     type: String,
-    required: true,
+    required: false,
   },
   date_created: {
     type: Date,
@@ -19,6 +20,6 @@ const ReasonSchema = new mongoose.Schema({
   },
 });
 
-const Reason = mongoose.model("Reason", ReasonSchema);
+const Position = mongoose.model("DataType", DataTypeSchema);
 
-module.exports = Reason;
+module.exports = Position;
